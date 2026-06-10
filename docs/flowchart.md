@@ -41,11 +41,11 @@ graph LR
 ---
 
 ## 2. Alur Pengguna Utama (User Journey)
-Ini adalah alur dari sudut pandang *User* saat membuka aplikasi CineReview dari awal sampai selesai memberi ulasan.
+Ini adalah alur dari sudut pandang *User* saat membuka aplikasi Absolute Cinema dari awal sampai selesai memberi ulasan.
 
 ```mermaid
 flowchart TD
-    A([Buka Aplikasi CineReview]) --> B{Sudah punya akun?}
+    A([Buka Aplikasi]) --> B{Sudah punya akun?}
     
     B -- Belum --> C[Masuk Halaman Register]
     B -- Sudah --> D[Masuk Halaman Login]
