@@ -1,4 +1,4 @@
-package com.op.absolutecinema.service;
+package com.oop.absolutecinema.service;
 
 import com.oop.absolutecinema.DTO.UserDTO;
 
