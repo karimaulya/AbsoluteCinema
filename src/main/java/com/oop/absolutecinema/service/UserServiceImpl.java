@@ -16,6 +16,11 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional(readOnly = true)
   public UserDTO.Response getProfile(Long id) {
+    // Validasi id null untuk keamanan tipe non-null
+    if (id == null) {
+      throw new RuntimeException("ID tidak boleh null.");
+    }
+
     // Cari user berdasarkan Long id
     // Jika ID tidak ditemukan, sistem otomatis menghentikan proses dan melempar RuntimeException
     User user = userRepository.findById(id)

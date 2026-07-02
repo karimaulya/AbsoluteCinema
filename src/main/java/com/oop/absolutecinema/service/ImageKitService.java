@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -67,8 +68,9 @@ public class ImageKitService {
                 public String getFilename() {
                     return fileName;
                 }
-            }).contentType(MediaType.parseMediaType(contentType));
-            builder.part("fileName", fileName);
+            }).contentType(MediaType.parseMediaType(Objects.requireNonNull(contentType)));
+            builder.part("fileName", Objects.requireNonNull(fileName))
+                    .contentType(Objects.requireNonNull(MediaType.TEXT_PLAIN));
         } catch (IOException e) {
             throw new RuntimeException("Gagal membaca file gambar: " + e.getMessage(), e);
         }
@@ -79,7 +81,7 @@ public class ImageKitService {
         try {
             response = restClient.post()
                     .header("Authorization", "Basic " + basicAuth)
-                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .contentType(Objects.requireNonNull(MediaType.MULTIPART_FORM_DATA))
                     .body(parts)
                     .retrieve()
                     .body(JsonNode.class);
