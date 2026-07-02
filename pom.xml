@@ -88,6 +88,14 @@
             <artifactId>spring-boot-starter-mail</artifactId>
        </dependency>
 
+        <!-- Auto-load .env from project root so ${VAR} in application.yml
+             resolves without manual 'source .env' or systemd EnvironmentFile. -->
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

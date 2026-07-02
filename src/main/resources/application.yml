@@ -17,6 +17,24 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
+  # Catatan: spring.mail.* TIDAK dipakai lagi (SMTP diblokir Railway).
+  # EmailService memakai Brevo HTTP API (app.brevo.*). Block di bawah
+  # dibiarkan sebagai dokumentasi/config cadangan kalau environment
+  # future tidak blokir SMTP — tinggal kembalikan EmailService ke JavaMailSender.
+  mail:
+    host: smtp-relay.brevo.com
+    port: 587
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
 springdoc:
   swagger-ui:
@@ -30,6 +48,12 @@ app:
     private-key:  ${IMAGEKIT_PRIVATE_KEY:}
     public-key:   ${IMAGEKIT_PUBLIC_KEY:}
     url-endpoint: ${IMAGEKIT_URL_ENDPOINT:}
+  # Brevo HTTP API (dipakai oleh EmailService). SMTP diblokir Railway,
+  # jadi EmailService memakai HTTP POST ke api.brevo.com (port 443).
+  brevo:
+    api-key: ${BREVO_API_KEY:}
+  mail:
+    from: ${MAIL_FROM:}
   tmdb:
     api-key:     ${TMDB_API_KEY:}
     base-url:    https://api.themoviedb.org/3
