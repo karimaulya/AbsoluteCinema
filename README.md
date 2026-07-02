@@ -11,7 +11,7 @@ Repositori ini merupakan backend service untuk aplikasi Absolute Cinema. Proyek 
 * **Unggah Gambar (ImageKit CDN):** Fitur unggah gambar ke ImageKit.io (CDN eksternal) sehingga menghasilkan URL publik yang disimpan di database — Railway-safe dan tidak hilang saat redeploy.
 * **Import dari TMDB:** Admin dapat mencari film/serial di The Movie Database (themoviedb.org) dan mengimpornya ke katalog dalam satu klik — metadata (judul, sinopsis, tahun, genre, sutradara, jumlah musim/episode, poster) terisi otomatis. API key TMDB tetap di server dan tidak pernah terekspos ke browser.
 * **Katalog Dinamis:** Pemisahan entitas antara Film dan Serial TV dengan properti dan detail yang spesifik untuk masing-masing jenis tayangan.
-* **PWA (Progressive Web APP):** aplikasi dapat diinstal sebagai PWA di Android/desktop dan tetap menampilkan halaman katalog meski koneksi terputus.
+* **PWA (Progressive Web App):** aplikasi dapat diinstal sebagai PWA di Android/desktop dan tetap menampilkan halaman katalog meski koneksi terputus.
 
 ---
 
@@ -178,3 +178,65 @@ Aplikasi merupakan Progressive Web App (PWA) yang dapat dipasang (installable) d
 
 ### Catatan Database
 Skema dibuat otomatis oleh Hibernate (`ddl-auto: update`). Kolom `email` dan `aktif` pada tabel `users` ditambahkan via ALTER dengan `DEFAULT TRUE`, sehingga user lama tidak terkunci. Jalankan `database_seed.sql` hanya pada database kosong untuk data contoh.
+
+---
+
+## Project Structure
+
+com.oop.absolutecinema
+│
+├── AbsoluteCinema.java                  # Entry point aplikasi Spring Boot
+│
+├── config/
+│   └── SecurityConfig.java              # Konfigurasi Spring Security & role-based access
+│
+├── controller/
+│   ├── AdminController.java             # Manajemen tayangan (admin only)
+│   ├── AuthController.java              # Register, login, verifikasi OTP
+│   ├── ReviewController.java            # Submit ulasan & rating
+│   ├── TayanganController.java          # REST API katalog film & serial
+│   ├── TmdbController.java              # Import metadata dari TMDB API
+│   ├── UIController.java                # Routing halaman Thymeleaf
+│   ├── UploadController.java            # Upload poster ke ImageKit CDN
+│   └── UserController.java              # Profil pengguna
+│
+├── DTO/
+│   ├── FilmDTO.java                     # Transfer data Film
+│   ├── ReviewDTO.java                   # Transfer data Review (Request/Response)
+│   ├── TmdbDTO.java                     # Transfer data hasil pencarian TMDB
+│   └── UserDTO.java                     # Transfer data User
+│
+├── entity/
+│   ├── Tayangan.java                    # Abstract class induk (OOP: Abstraction)
+│   ├── Film.java                        # Extends Tayangan (OOP: Inheritance)
+│   ├── SerialTV.java                    # Extends Tayangan (OOP: Inheritance)
+│   ├── Rateable.java                    # Interface kalkulasi rating (OOP: Abstraction)
+│   ├── Review.java                      # Entity ulasan — relasi User ↔ Tayangan
+│   └── User.java                        # Entity akun pengguna
+│
+├── exception/
+│   ├── DataTidakDitemukanException.java # Thrown saat data tidak ditemukan (404)
+│   └── JudulDuplikatException.java      # Thrown saat judul tayangan sudah ada
+│
+├── repository/
+│   ├── FilmRepository.java              # JPA Repository untuk Film
+│   ├── ReviewRepository.java            # JPA Repository untuk Review
+│   ├── SerialTVRepository.java          # JPA Repository untuk SerialTV
+│   └── UserRepository.java              # JPA Repository untuk User
+│
+└── service/
+    ├── TayanganService.java             # Interface service tayangan
+    ├── TayanganServiceImpl.java         # Implementasi logika bisnis tayangan
+    ├── ReviewService.java               # Interface service review
+    ├── ReviewServiceImpl.java           # Implementasi kalkulasi rating (tambahReview)
+    ├── UserService.java                 # Interface service user
+    ├── UserServiceImpl.java             # Implementasi manajemen akun
+    ├── AuthService.java                 # Logika autentikasi & verifikasi OTP
+    ├── EmailService.java                # Kirim email via Brevo HTTP API
+    ├── OTPMailService.java              # Generate & validasi kode OTP
+    ├── ImageKitService.java             # Upload & manajemen gambar ke CDN
+    ├── TmdbService.java                 # Fetch & import data dari TMDB
+    ├── CustomUserDetails.java           # Wrapper User untuk Spring Security
+    └── CustomUserDetailsService.java    # Load user by username (Spring Security)
+
+---
