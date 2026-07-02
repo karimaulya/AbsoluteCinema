@@ -182,7 +182,7 @@ Skema dibuat otomatis oleh Hibernate (`ddl-auto: update`). Kolom `email` dan `ak
 ---
 
 ## Project Structure
-
+```text
 com.oop.absolutecinema
 │
 ├── AbsoluteCinema.java                  # Entry point aplikasi Spring Boot
@@ -238,5 +238,5 @@ com.oop.absolutecinema
     ├── TmdbService.java                 # Fetch & import data dari TMDB
     ├── CustomUserDetails.java           # Wrapper User untuk Spring Security
     └── CustomUserDetailsService.java    # Load user by username (Spring Security)
-
+```
 ---
